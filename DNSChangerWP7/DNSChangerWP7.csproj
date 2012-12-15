@@ -56,6 +56,7 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Xml" />
     <Reference Include="mscorlib.extensions" />
+    <Reference Include="WP7RootToolsSDK-0.2.1.0, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -88,6 +89,17 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SplashScreenImage.jpg" />
+    <Content Include="WP7RootToolsSDK-0.2.1.0.dll" />
+    <None Include="WP7RootToolsSDK-ChangeLog.txt" />
+    <None Include="WP7RootToolsSDK-Examples.txt" />
+    <None Include="WP7RootToolsSDK-License.txt" />
+    <None Include="WP7RootToolsSDK-ReadMe.txt" />
+    <Content Include="WP7RootToolsSDKNative-0.2.1.0.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WPInteropManifest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
@@ -99,4 +111,8 @@
   </Target>
   -->
   <ProjectExtensions />
+  <PropertyGroup>
+    <PostBuildEvent>del "$(TargetDir)DNSChangerWP7_*.xap"
+cmd /C copy "$(TargetDir)DNSChangerWP7.xap" "$(TargetDir)DNSChangerWP7_%25RANDOM%25.xap"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

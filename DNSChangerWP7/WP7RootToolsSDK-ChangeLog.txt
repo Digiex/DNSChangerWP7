@@ -1,0 +1,18 @@
+Changelog WP7 Root Tools SDK
+
+Version 0.2.1.0:
+
+- FIX: It was not possible to get the contents of the root-folder.
+- FIX: Massive performance-improvement for getting folder-contents (THANKS A LOT TO: ULTRASHOT)
+- NEW: string Environment.ProcessConfigXml(string ConfigXml)
+- NEW: FileStream.Seek()
+- NEW: string[] Registry.GetMultiStringValue(RegistryHyve Root, string Key, string ValueName)
+- NEW: void Registry.SetMultiStringValue(RegistryHyve Root, string Key, string ValueName, string[] Value)
+- NEW: byte[] Registry.GetBinaryValue(RegistryHyve Root, string Key, string ValueName)
+- NEW: void Registry.SetBinaryValue(RegistryHyve Root, string Key, string ValueName, byte[] Value)
+- NEW: void Environment.ShellExecute(string Application)
+- NEW: void Environment.ShellExecute(string Application, string Arguments)
+
+Version 0.1.6.0:
+
+- Initial public release.
