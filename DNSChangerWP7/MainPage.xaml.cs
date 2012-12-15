@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,6 +30,11 @@ namespace DNSChangerWP7
 
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
+            refreshAdapters();
+        }
+
+        private void refreshAdapters()
+        {
             try
             {
                 RegistryKey commKey = Registry.GetKey(RegistryHyve.LocalMachine, "Comm");
@@ -49,9 +53,12 @@ namespace DNSChangerWP7
                             if (tcpipkey.GetValueCount() > 0)
                             {
                                 string DNS = "none";
+                                string primaryDNS = "";
                                 try
                                 {
-                                    DNS = String.Join(", ", Registry.GetMultiStringValue(tcpipkey.Root, tcpipkey.Path, "DNS"));
+                                    string[] dnss = Registry.GetMultiStringValue(tcpipkey.Root, tcpipkey.Path, "DNS");
+                                    DNS = String.Join(", ", dnss);
+                                    primaryDNS = dnss[0];
                                 }
                                 catch (Exception)
                                 {
@@ -61,7 +68,7 @@ namespace DNSChangerWP7
                                     }
                                     catch (Exception) { }
                                 }
-                                lstAdapters.Items.Add(new lstAdapterItem() { Name = subkey.Name, Description = DNS });
+                                lstAdapters.Items.Add(new lstAdapterItem() { Name = subkey.Name, Description = DNS, PrimaryDNS = primaryDNS, KeyPath = tcpipkey.Path, KeyRoot = tcpipkey.Root });
                             }
                         }
                         catch (Exception) { }
@@ -77,6 +84,42 @@ namespace DNSChangerWP7
         {
             public string Name { get; set; }
             public string Description { get; set; }
+            public string PrimaryDNS { get; set; }
+            public RegistryHyve KeyRoot { get; set; }
+            public string KeyPath { get; set; }
+        }
+
+        private void lstAdapters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            lstAdapterItem selItem = ((lstAdapterItem)lstAdapters.SelectedItem);
+            TextBox dnsBox = new TextBox() { Text = selItem.PrimaryDNS };
+
+            TiltEffect.SetIsTiltEnabled(dnsBox, true);
+
+            CustomMessageBox messageBox = new CustomMessageBox()
+            {
+                Caption = "Edit DNS for " + selItem.Name,
+                Message = "Primary DNS Server:",
+                Content = dnsBox,
+                LeftButtonContent = "save",
+                RightButtonContent = "cancel",
+                IsFullScreen = false
+            };
+
+            messageBox.Dismissed += (s1, e1) =>
+            {
+                if (e1.Result == CustomMessageBoxResult.LeftButton)
+                {
+                    Registry.SetMultiStringValue(selItem.KeyRoot, selItem.KeyPath, "DNS", new string[] { dnsBox.Text });
+                    //TODO: Clear the list first
+                    refreshAdapters();
+                }
+                //TODO: Fix this
+                //lstAdapters.SelectedIndex = -1;
+            };
+
+            messageBox.Show();
+
         }
     }
 }

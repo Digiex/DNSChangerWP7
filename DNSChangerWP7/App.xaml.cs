@@ -91,6 +91,10 @@ namespace DNSChangerWP7
                 // A navigation has failed; break into the debugger
                 System.Diagnostics.Debugger.Break();
             }
+            else
+            {
+                MessageBox.Show(e.Exception.StackTrace, e.Exception.Message, MessageBoxButton.OK);
+            }
         }
 
         // Code to execute on Unhandled Exceptions
@@ -100,6 +104,10 @@ namespace DNSChangerWP7
             {
                 // An unhandled exception has occurred; break into the debugger
                 System.Diagnostics.Debugger.Break();
+            }
+            else
+            {
+                MessageBox.Show(e.ExceptionObject.StackTrace, e.ExceptionObject.Message, MessageBoxButton.OK);
             }
         }
 
